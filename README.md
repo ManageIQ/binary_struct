@@ -5,6 +5,60 @@ expressing what the binary structure looks like, with the ability to name the
 parts.  Given this definition, it is easy to encode/decode the binary structure
 from/to a Hash.
 
+## Example Usage
+
+As an example, we will show reading and writing a .gif header.  This example is
+also in spec/gif_spec.rb.
+
+### Create the structure definition
+
+```ruby
+gif_header = BinaryStruct.new([
+  "a3", :magic,
+  "a3", :version,
+  "S",  :width,
+  "S",  :height,
+  "a",  :flags,
+  "C",  :bg_color_index,
+  "C",  :pixel_aspect_ratio
+])
+```
+
+### Read the header
+
+```ruby
+header_size = gif_header.size
+header = File.open("test.gif", "rb") { |f| f.read(header_size) }
+gif_header.decode(header)
+
+=> {
+  :magic              => "GIF",
+  :version            => "89a",
+  :width              => 16,
+  :height             => 16,
+  :flags              => "\x80",
+  :bg_color_index     => 0,
+  :pixel_aspect_ratio => 0
+}
+```
+
+### Write the header
+
+```ruby
+header = gif_header.encode({
+  :magic              => "GIF",
+  :version            => "89a",
+  :width              => 16,
+  :height             => 16,
+  :flags              => "\x80",
+  :bg_color_index     => 0,
+  :pixel_aspect_ratio => 0
+})
+File.open("test.gif", "wb") { |f| f.write(header) }
+
+=> "GIF89a\x10\x00\x10\x00\x80\x00\x00"
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -18,10 +72,6 @@ And then execute:
 Or install it yourself as:
 
     $ gem install binary_struct
-
-## Usage
-
-TODO
 
 ## Contributing
 
