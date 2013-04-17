@@ -150,24 +150,33 @@ class BinaryStruct
 
   def self.validate_definition(definition)
     raise "definition must be an array of format/name pairs" if definition.empty? || definition.length % 2 != 0
-    definition.each_slice(2) do |format, name|
+    definition.each_slice(2) do |format, _|
       type, count = format[0, 1], format[1..-1]
-      raise "unrecognized format: #{type}" unless SIZES.has_key?(type)
-      raise "unsupported format: #{type}" if SIZES[type].nil?
-      unless count.empty? || count == '*'
-        begin
-          count = Integer(count)
-        rescue
-          raise "unsupported count: #{count}"
-        end
-        raise "unsupported count: #{count}" if count < 0
-      end
+      validate_definition_entry_type(type)
+      validate_definition_entry_count(count)
     end
+  end
+
+  def self.validate_definition_entry_type(type)
+    raise "unrecognized format: #{type}" unless SIZES.has_key?(type)
+    raise "unsupported format: #{type}" if SIZES[type].nil?
+    return true
+  end
+
+  def self.validate_definition_entry_count(count)
+    return true if count.empty? || count == '*'
+
+    begin
+      count = Integer(count)
+    rescue
+      raise "unsupported count: #{count}"
+    end
+    raise "unsupported count: #{count}" if count < 0
   end
 
   def self.get_size(definition)
     size = 0
-    definition.each_slice(2) do |format, name|
+    definition.each_slice(2) do |format, _|
       type, count = format[0, 1], format[1..-1]
       count = count.empty? ? 1 : count.to_i
       size += (count * SIZES[type])
