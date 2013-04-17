@@ -131,24 +131,22 @@ class BinaryStruct
   end
 
   def self.sizeof(definition)
-    d = @@structs_by_definition[definition]
-    d = @@structs_by_definition[definition] = definition.kind_of?(self) ? definition : self.new(definition) if d.nil?
-    d.size
+    struct_by_definition(definition).size
   end
 
   def self.decode(data, definition)
-    d = @@structs_by_definition[definition]
-    d = @@structs_by_definition[definition] = definition.kind_of?(self) ? definition : self.new(definition) if d.nil?
-    d.decode(data)
+    struct_by_definition(definition).decode(data)
   end
 
   def self.encode(hash, definition)
-    d = @@structs_by_definition[definition]
-    d = @@structs_by_definition[definition] = definition.kind_of?(self) ? definition : self.new(definition) if d.nil?
-    d.encode(hash)
+    struct_by_definition(definition).encode(hash)
   end
 
   private
+
+  def self.struct_by_definition(definition)
+    @@structs_by_definition[definition] ||= definition.kind_of?(self) ? definition : self.new(definition)
+  end
 
   def self.validate_definition(definition)
     raise "definition must be an array of format/name pairs" if definition.empty? || definition.length % 2 != 0
