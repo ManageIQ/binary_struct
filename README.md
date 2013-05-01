@@ -1,5 +1,6 @@
 # BinaryStruct
 
+[![Gem Version](https://badge.fury.io/rb/binary_struct.png)](http://badge.fury.io/rb/binary_struct)
 [![Build Status](https://travis-ci.org/ManageIQ/binary_struct.png)](https://travis-ci.org/ManageIQ/binary_struct)
 [![Code Climate](https://codeclimate.com/github/ManageIQ/binary_struct.png)](https://codeclimate.com/github/ManageIQ/binary_struct)
 [![Coverage Status](https://coveralls.io/repos/ManageIQ/binary_struct/badge.png?branch=master)](https://coveralls.io/r/ManageIQ/binary_struct)
