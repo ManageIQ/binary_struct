@@ -15,5 +15,8 @@ RSpec.configure do |config|
   config.order = 'random'
 end
 
-require 'coveralls'
-Coveralls.wear!
+begin
+  require 'coveralls'
+  Coveralls.wear!
+rescue LoadError
+end
