@@ -39,7 +39,10 @@ class BinaryStruct
     'Z'   => 1,   # String with trailing NULs removed
   }
 
-  STRING_FORMATS = %w{A a M m u}
+  STRING_FORMATS   = %w(A a M m u)
+  ENDIAN_FORMATS   = %w(I i L l Q q S s)
+  ENDIAN_MODIFIERS = %w(> <)
+  MODIFIERS        = ENDIAN_MODIFIERS
 
   def initialize(definition = nil)
     self.definition = definition unless definition.nil?
@@ -152,8 +155,14 @@ class BinaryStruct
     raise "definition must be an array of format/name pairs" if definition.empty? || definition.length % 2 != 0
     definition.each_slice(2) do |format, _|
       type, count = format[0, 1], format[1..-1]
+      modifier, modcount = count[0, 1], count[1..-1]
       validate_definition_entry_type(type)
-      validate_definition_entry_count(count)
+      if validate_definition_entry_modifier(modifier)
+        validate_definition_endian_modifier(modifier, type)
+        validate_definition_entry_count(modcount)
+      else
+        validate_definition_entry_count(count)
+      end
     end
   end
 
@@ -174,14 +183,32 @@ class BinaryStruct
     raise "unsupported count: #{count}" if count < 0
   end
 
+  def self.validate_definition_entry_modifier(modifier)
+    return true if MODIFIERS.include? modifier
+    false
+  end
+
+  def self.validate_definition_endian_modifier(modifier, type)
+    if ENDIAN_MODIFIERS.include? modifier
+      raise "unsupported type attribute #{type} for endian modifier #{modifier}" unless ENDIAN_FORMATS.include? type
+      return true
+    end
+    false
+  end
+
   def self.get_size(definition)
     size = 0
     definition.each_slice(2) do |format, _|
-      type, count = format[0, 1], format[1..-1]
-      count = count.empty? ? 1 : count.to_i
+      type, count        = format[0, 1], format[1..-1]
+      modifier, modcount = count[0, 1], count[1..-1]
+      if validate_definition_entry_modifier(modifier)
+        count = modcount.empty? ? 1 : modcount.to_i
+      else
+        count = count.empty? ? 1 : count.to_i
+      end
       size += (count * SIZES[type])
     end
-    return size
+    size
   end
 
   def self.prep_decode(definition)
