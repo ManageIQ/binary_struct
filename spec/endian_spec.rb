@@ -24,6 +24,7 @@ describe BinaryStruct do
 
   BIG_STRUCT_DEF_UNRECOG_ENDIAN_FMT   = ['Y>', nil]
   BIG_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE = ['A>', nil]
+  BIG_STRUCT_DEF_INVALID_ENDIAN_MODIFIER = ['Q_', nil]
 
   LIL_STRUCT_DEF = [
     'Q<',  :quad,
@@ -55,7 +56,7 @@ describe BinaryStruct do
     'S<8',  :shorts[8],
   ]
 
-  STRUCT_ENCODED_STR  = "\000\111\222\333\444\555\666\777\000\111\222\333\000\111\0000BC"
+  END_STRUCT_ENCODED_STR  = "\000\111\222\333\444\555\666\777\000\111\222\333\000\111\0000BC"
 
   LIL_ENDIAN_STRUCT_DECODED_HASH = {:quad  => 18_426_034_930_503_010_560,
                                     "long" => 3_683_797_248,
@@ -116,6 +117,11 @@ describe BinaryStruct do
     raise_error(RuntimeError)
   end
 
+  it('.new with invalid endian modifier') do
+    ->() { BinaryStruct.new(BIG_STRUCT_DEF_INVALID_ENDIAN_MODIFIER) }.should
+    raise_error(RuntimeError)
+  end
+
   it('.new with unrecognized little e format') do
     ->() { BinaryStruct.new(LIL_STRUCT_DEF_UNRECOG_ENDIAN_FMT) }.should
     raise_error(RuntimeError)
@@ -156,8 +162,8 @@ describe BinaryStruct do
   it('#size with definition with *') { BinaryStruct.new(LIL_STRUCT_DEF_STAR).size.should == LIL_STRUCT_DEF_STAR_SIZE }
 
   it '#decode with different endian definitions' do
-    BinaryStruct.new(BIG_STRUCT_DEF).decode(STRUCT_ENCODED_STR).should_not
-    equal(BinaryStruct.new(LIL_STRUCT_DEF).decode(STRUCT_ENCODED_STR))
+    BinaryStruct.new(BIG_STRUCT_DEF).decode(END_STRUCT_ENCODED_STR).should_not
+    equal(BinaryStruct.new(LIL_STRUCT_DEF).decode(END_STRUCT_ENCODED_STR))
   end
   it '#encode with different endian definitions' do
     big    = BinaryStruct.new(BIG_STRUCT_DEF).encode(BIG_ENDIAN_STRUCT_DECODED_HASH)
@@ -166,10 +172,10 @@ describe BinaryStruct do
   end
 
   it '#decode little endian struct' do
-    BinaryStruct.new(LIL_STRUCT_DEF).decode(STRUCT_ENCODED_STR).should == LIL_ENDIAN_STRUCT_DECODED_HASH
+    BinaryStruct.new(LIL_STRUCT_DEF).decode(END_STRUCT_ENCODED_STR).should == LIL_ENDIAN_STRUCT_DECODED_HASH
   end
   it '#decode big endian struct' do
-    BinaryStruct.new(BIG_STRUCT_DEF).decode(STRUCT_ENCODED_STR).should == BIG_ENDIAN_STRUCT_DECODED_HASH
+    BinaryStruct.new(BIG_STRUCT_DEF).decode(END_STRUCT_ENCODED_STR).should == BIG_ENDIAN_STRUCT_DECODED_HASH
   end
 
   it '#== against another little endian BinaryStruct' do
