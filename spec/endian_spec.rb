@@ -12,19 +12,17 @@ describe BinaryStruct do
     'a',   nil,
     'a2',  'bc',
   ]
-  BIG_STRUCT_DEF_SIZE = 18
+  BIG_STRUCT_DEF_SIZE                         = 18
 
-  BIG_E_QUAD_STRUCT_DEF = [
-    'Q>2',  :quad,
-  ]
-  BIG_E_QUAD_DEF_SIZE = 16
+  BIG_E_QUAD_STRUCT_DEF                       = ['Q>2',  :quad]
+  BIG_E_QUAD_DEF_SIZE                         = 16
 
-  BIG_STRUCT_DEF_STAR = ['i>*', :word]
-  BIG_STRUCT_DEF_STAR_SIZE = 0 # '*' is ignored
+  BIG_STRUCT_DEF_STAR                         = ['i>*', :word]
+  BIG_STRUCT_DEF_STAR_SIZE                    = 0 # '*' is ignored
 
-  BIG_STRUCT_DEF_UNRECOG_ENDIAN_FMT   = ['Y>', nil]
+  BIG_STRUCT_DEF_UNRECOG_ENDIAN_FMT           = ['Y>', nil]
   BIG_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE = ['A>', nil]
-  BIG_STRUCT_DEF_INVALID_ENDIAN_MODIFIER = ['Q_', nil]
+  BIG_STRUCT_DEF_INVALID_ENDIAN_MODIFIER      = ['Q_', nil]
 
   LIL_STRUCT_DEF = [
     'Q<',  :quad,
@@ -35,28 +33,18 @@ describe BinaryStruct do
     'a',   nil,
     'a2',  'bc',
   ]
-  LIL_STRUCT_DEF_SIZE = 18
+  LIL_STRUCT_DEF_SIZE                         = 18
 
-  LIL_E_QUAD_STRUCT_DEF = [
-    'Q<2',  :quad,
-  ]
-  LIL_E_QUAD_DEF_SIZE = 16
+  LIL_E_QUAD_STRUCT_DEF                       = ['Q<2',  :quad]
+  LIL_E_QUAD_DEF_SIZE                         = 16
 
-  LIL_STRUCT_DEF_STAR = ['i<*', :word]
-  LIL_STRUCT_DEF_STAR_SIZE = 0 # '*' is ignored
+  LIL_STRUCT_DEF_STAR                         = ['i<*', :word]
+  LIL_STRUCT_DEF_STAR_SIZE                    = 0 # '*' is ignored
 
-  LIL_STRUCT_DEF_UNRECOG_ENDIAN_FMT   = ['Y<', nil]
+  LIL_STRUCT_DEF_UNRECOG_ENDIAN_FMT           = ['Y<', nil]
   LIL_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE = ['A<', nil]
 
-  BIG_E_SHORT_STRUCT_DEF = [
-    'S>8',  :shorts[8],
-  ]
-
-  LIL_E_SHORT_STRUCT_DEF = [
-    'S<8',  :shorts[8],
-  ]
-
-  END_STRUCT_ENCODED_STR  = "\000\111\222\333\444\555\666\777\000\111\222\333\000\111\0000BC"
+  END_STRUCT_ENCODED_STR         = "\000\111\222\333\444\555\666\777\000\111\222\333\000\111\0000BC"
 
   LIL_ENDIAN_STRUCT_DECODED_HASH = {:quad  => 18_426_034_930_503_010_560,
                                     "long" => 3_683_797_248,
@@ -69,90 +57,76 @@ describe BinaryStruct do
                                     "none" => "",
                                     "bc"   => "BC"}
 
-  it('.new') { ->() { BinaryStruct.new }.should_not raise_error }
-  it('.new with big definition') { ->() { BinaryStruct.new(BIG_STRUCT_DEF) }.should_not raise_error }
-  it('.new with little definition') { ->() { BinaryStruct.new(LIL_STRUCT_DEF) }.should_not raise_error }
-  it('.new with big definition with *') { ->() { BinaryStruct.new(BIG_STRUCT_DEF_STAR) }.should_not raise_error }
-  it('.new with little definition with *') { ->() { BinaryStruct.new(LIL_STRUCT_DEF_STAR) }.should_not raise_error }
-  it '.new with another big endian BinaryStruct should ==' do
+  it('.new') { -> { BinaryStruct.new }.should_not raise_error }
+  it('.new with big definition') { -> { BinaryStruct.new(BIG_STRUCT_DEF) }.should_not raise_error }
+  it('.new with little definition') { -> { BinaryStruct.new(LIL_STRUCT_DEF) }.should_not raise_error }
+  it('.new with big definition with *') { -> { BinaryStruct.new(BIG_STRUCT_DEF_STAR) }.should_not raise_error }
+  it('.new with little definition with *') { -> { BinaryStruct.new(LIL_STRUCT_DEF_STAR) }.should_not raise_error }
+  it '.new with another big endian BinaryStruct' do
     s = BinaryStruct.new(BIG_STRUCT_DEF)
     s2 = BinaryStruct.new(s)
     s2.should == s
-  end
-  it '.new with another big endian BinaryStruct should not equal' do
-    s = BinaryStruct.new(BIG_STRUCT_DEF)
-    s2 = BinaryStruct.new(s)
     s2.should_not equal(s)
   end
 
-  it '.new with another little endian BinaryStruct should ==' do
+  it '.new with another little endian BinaryStruct' do
     s = BinaryStruct.new(LIL_STRUCT_DEF)
     s2 = BinaryStruct.new(s)
     s2.should == s
-  end
-  it '.new with another little endian BinaryStruct should not equal' do
-    s = BinaryStruct.new(LIL_STRUCT_DEF)
-    s2 = BinaryStruct.new(s)
     s2.should_not equal(s)
   end
 
-  it '.new with another little BinaryStruct should ==' do
+  it '.new big endian BinaryStruct with a little endian one' do
     s = BinaryStruct.new(BIG_STRUCT_DEF)
     s2 = BinaryStruct.new(LIL_STRUCT_DEF)
     s2.should_not == s
-  end
-  it '.new with another little BinaryStruct should not equal' do
-    s = BinaryStruct.new(BIG_STRUCT_DEF)
-    s2 = BinaryStruct.new(LIL_STRUCT_DEF)
     s2.should_not equal(s)
   end
 
   it('.new with unrecognized big e format') do
-    ->() { BinaryStruct.new(BIG_STRUCT_DEF_UNRECOG_ENDIAN_FMT) }.should
+    -> { BinaryStruct.new(BIG_STRUCT_DEF_UNRECOG_ENDIAN_FMT) }.should
     raise_error(RuntimeError)
   end
 
   it('.new with unsupported big e attribute') do
-    ->() { BinaryStruct.new(BIG_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE) }.should
+    -> { BinaryStruct.new(BIG_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE) }.should
     raise_error(RuntimeError)
   end
 
   it('.new with invalid endian modifier') do
-    ->() { BinaryStruct.new(BIG_STRUCT_DEF_INVALID_ENDIAN_MODIFIER) }.should
+    -> { BinaryStruct.new(BIG_STRUCT_DEF_INVALID_ENDIAN_MODIFIER) }.should
     raise_error(RuntimeError)
   end
 
   it('.new with unrecognized little e format') do
-    ->() { BinaryStruct.new(LIL_STRUCT_DEF_UNRECOG_ENDIAN_FMT) }.should
+    -> { BinaryStruct.new(LIL_STRUCT_DEF_UNRECOG_ENDIAN_FMT) }.should
     raise_error(RuntimeError)
   end
 
   it('.new with unsupported little e attribute') do
-    ->() { BinaryStruct.new(LIL_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE) }.should
+    -> { BinaryStruct.new(LIL_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE) }.should
     raise_error(RuntimeError)
   end
 
-  it('.new') { ->() { BinaryStruct.new }.should_not raise_error }
-
   it('#definition= with definition with *') do
-    ->() { BinaryStruct.new.definition = BIG_STRUCT_DEF_STAR }.should_not
+    -> { BinaryStruct.new.definition = BIG_STRUCT_DEF_STAR }.should_not
     raise_error
   end
 
   it('#definition= with unrecognized big e format') do
-    ->() { BinaryStruct.new.definition = BIG_STRUCT_DEF_UNRECOG_ENDIAN_FMT }.should
+    -> { BinaryStruct.new.definition = BIG_STRUCT_DEF_UNRECOG_ENDIAN_FMT }.should
     raise_error(RuntimeError)
   end
   it('#definition= with unsupported big e attribute') do
-    ->() { BinaryStruct.new.definition = BIG_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE }.should
+    -> { BinaryStruct.new.definition = BIG_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE }.should
     raise_error(RuntimeError)
   end
   it('#definition= with unrecognized little e format') do
-    ->() { BinaryStruct.new.definition = LIL_STRUCT_DEF_UNRECOG_ENDIAN_FMT }.should
+    -> { BinaryStruct.new.definition = LIL_STRUCT_DEF_UNRECOG_ENDIAN_FMT }.should
     raise_error(RuntimeError)
   end
   it('#definition= with unsupported little e attribute') do
-    ->() { BinaryStruct.new.definition = LIL_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE }.should
+    -> { BinaryStruct.new.definition = LIL_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE }.should
     raise_error(RuntimeError)
   end
 

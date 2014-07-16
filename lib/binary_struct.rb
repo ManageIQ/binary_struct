@@ -157,7 +157,7 @@ class BinaryStruct
       type, count = format[0, 1], format[1..-1]
       modifier, modcount = count[0, 1], count[1..-1]
       validate_definition_entry_type(type)
-      if validate_definition_entry_modifier(modifier)
+      if valid_definition_entry_modifier?(modifier)
         validate_definition_endian_modifier(modifier, type)
         validate_definition_entry_count(modcount)
       else
@@ -183,9 +183,8 @@ class BinaryStruct
     raise "unsupported count: #{count}" if count < 0
   end
 
-  def self.validate_definition_entry_modifier(modifier)
-    return true if MODIFIERS.include? modifier
-    false
+  def self.valid_definition_entry_modifier?(modifier)
+    MODIFIERS.include? modifier
   end
 
   def self.validate_definition_endian_modifier(modifier, type)
@@ -201,11 +200,8 @@ class BinaryStruct
     definition.each_slice(2) do |format, _|
       type, count        = format[0, 1], format[1..-1]
       modifier, modcount = count[0, 1], count[1..-1]
-      if validate_definition_entry_modifier(modifier)
-        count = modcount.empty? ? 1 : modcount.to_i
-      else
-        count = count.empty? ? 1 : count.to_i
-      end
+      count = modcount if valid_definition_entry_modifier?(modifier)
+      count = count.empty? ? 1 : count.to_i
       size += (count * SIZES[type])
     end
     size

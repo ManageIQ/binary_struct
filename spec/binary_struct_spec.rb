@@ -104,9 +104,7 @@ describe BinaryStruct do
 
     it '#encode' do
       BinaryStruct.encode(STRUCT_DECODED_HASH, STRUCT_DEF).should == STRUCT_ENCODED_STR.force_encoding("ASCII-8BIT")
-    end
-    # Do it twice for consistency reasons
-    it '#encode' do
+      # Do it twice for consistency reasons
       BinaryStruct.encode(STRUCT_DECODED_HASH, STRUCT_DEF).should == STRUCT_ENCODED_STR.force_encoding("ASCII-8BIT")
     end
   end
