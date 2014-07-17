@@ -22,7 +22,7 @@ describe BinaryStruct do
   STRUCT_DEF_UNSUPPORTED_COUNT_NEG = ['a-1', nil]
   STRUCT_DEF_UNSUPPORTED_COUNT_INV = ['aX', nil]
 
-  STRUCT_ENCODED_STR  = "\000\111\222\333\444\555\666\777\000\111\222\333\000\111\0000BC"
+  STRUCT_ENCODED_STR  = "\000\111\222\333\444\555\666\777\000\111\222\333\000\111\0000BC".force_encoding("ASCII-8BIT")
   STRUCT_DECODED_HASH = {:quad=>18426034930503010560, "long"=>3683797248, :short=>18688, "bc"=>"BC", "none"=>""}
 
   it('.new') { lambda { BinaryStruct.new }.should_not raise_error }
@@ -64,7 +64,7 @@ describe BinaryStruct do
   end
 
   it '#encode' do
-    BinaryStruct.new(STRUCT_DEF).encode(STRUCT_DECODED_HASH).should == STRUCT_ENCODED_STR
+    BinaryStruct.new(STRUCT_DEF).encode(STRUCT_DECODED_HASH).should == STRUCT_ENCODED_STR.force_encoding("ASCII-8BIT")
   end
 
   it '#encode with definition with *' do
@@ -72,7 +72,8 @@ describe BinaryStruct do
   end
 
   it '#encode against multiple records' do
-    BinaryStruct.new(STRUCT_DEF).encode([STRUCT_DECODED_HASH] * 10).should == (STRUCT_ENCODED_STR * 10)
+    s = BinaryStruct.new(STRUCT_DEF).encode([STRUCT_DECODED_HASH] * 10)
+    s.should == (STRUCT_ENCODED_STR.force_encoding("ASCII-8BIT") * 10)
   end
 
   it '#== against another BinaryStruct' do
@@ -102,9 +103,9 @@ describe BinaryStruct do
     end
 
     it '#encode' do
-      BinaryStruct.encode(STRUCT_DECODED_HASH, STRUCT_DEF).should == STRUCT_ENCODED_STR
+      BinaryStruct.encode(STRUCT_DECODED_HASH, STRUCT_DEF).should == STRUCT_ENCODED_STR.force_encoding("ASCII-8BIT")
       # Do it twice for consistency reasons
-      BinaryStruct.encode(STRUCT_DECODED_HASH, STRUCT_DEF).should == STRUCT_ENCODED_STR
+      BinaryStruct.encode(STRUCT_DECODED_HASH, STRUCT_DEF).should == STRUCT_ENCODED_STR.force_encoding("ASCII-8BIT")
     end
   end
 end
