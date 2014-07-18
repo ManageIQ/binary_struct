@@ -57,140 +57,140 @@ describe BinaryStruct do
                                     "none" => "",
                                     "bc"   => "BC"}
 
-  it('.new') { -> { BinaryStruct.new }.should_not raise_error }
-  it('.new with big definition') { -> { BinaryStruct.new(BIG_STRUCT_DEF) }.should_not raise_error }
-  it('.new with little definition') { -> { BinaryStruct.new(LIL_STRUCT_DEF) }.should_not raise_error }
-  it('.new with big definition with *') { -> { BinaryStruct.new(BIG_STRUCT_DEF_STAR) }.should_not raise_error }
-  it('.new with little definition with *') { -> { BinaryStruct.new(LIL_STRUCT_DEF_STAR) }.should_not raise_error }
+  it('.new') { expect { BinaryStruct.new }.not_to raise_error }
+  it('.new with big definition') { expect { BinaryStruct.new(BIG_STRUCT_DEF) }.not_to raise_error }
+  it('.new with little definition') { expect { BinaryStruct.new(LIL_STRUCT_DEF) }.not_to raise_error }
+  it('.new with big definition with *') { expect { BinaryStruct.new(BIG_STRUCT_DEF_STAR) }.not_to raise_error }
+  it('.new with little definition with *') { expect { BinaryStruct.new(LIL_STRUCT_DEF_STAR) }.not_to raise_error }
   it '.new with another big endian BinaryStruct' do
     s = BinaryStruct.new(BIG_STRUCT_DEF)
     s2 = BinaryStruct.new(s)
-    s2.should == s
-    s2.should_not equal(s)
+    expect(s2).to eq(s)
+    expect(s2).not_to equal(s)
   end
 
   it '.new with another little endian BinaryStruct' do
     s = BinaryStruct.new(LIL_STRUCT_DEF)
     s2 = BinaryStruct.new(s)
-    s2.should == s
-    s2.should_not equal(s)
+    expect(s2).to eq(s)
+    expect(s2).not_to equal(s)
   end
 
   it '.new big endian BinaryStruct with a little endian one' do
     s = BinaryStruct.new(BIG_STRUCT_DEF)
     s2 = BinaryStruct.new(LIL_STRUCT_DEF)
-    s2.should_not == s
-    s2.should_not equal(s)
+    expect(s2).not_to eq(s)
+    expect(s2).not_to equal(s)
   end
 
   it('.new with unrecognized big e format') do
-    -> { BinaryStruct.new(BIG_STRUCT_DEF_UNRECOG_ENDIAN_FMT) }.should
-    raise_error(RuntimeError)
+    expect { BinaryStruct.new(BIG_STRUCT_DEF_UNRECOG_ENDIAN_FMT) }
+      .to raise_error(RuntimeError)
   end
 
   it('.new with unsupported big e attribute') do
-    -> { BinaryStruct.new(BIG_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE) }.should
-    raise_error(RuntimeError)
+    expect { BinaryStruct.new(BIG_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE) }
+      .to raise_error(RuntimeError)
   end
 
   it('.new with invalid endian modifier') do
-    -> { BinaryStruct.new(BIG_STRUCT_DEF_INVALID_ENDIAN_MODIFIER) }.should
-    raise_error(RuntimeError)
+    expect { BinaryStruct.new(BIG_STRUCT_DEF_INVALID_ENDIAN_MODIFIER) }
+      .to raise_error(RuntimeError)
   end
 
   it('.new with unrecognized little e format') do
-    -> { BinaryStruct.new(LIL_STRUCT_DEF_UNRECOG_ENDIAN_FMT) }.should
-    raise_error(RuntimeError)
+    expect { BinaryStruct.new(LIL_STRUCT_DEF_UNRECOG_ENDIAN_FMT) }
+      .to raise_error(RuntimeError)
   end
 
   it('.new with unsupported little e attribute') do
-    -> { BinaryStruct.new(LIL_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE) }.should
-    raise_error(RuntimeError)
+    expect { BinaryStruct.new(LIL_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE) }
+      .to raise_error(RuntimeError)
   end
 
   it('#definition= with definition with *') do
-    -> { BinaryStruct.new.definition = BIG_STRUCT_DEF_STAR }.should_not
-    raise_error
+    expect { BinaryStruct.new.definition = BIG_STRUCT_DEF_STAR }
+      .not_to raise_error
   end
 
   it('#definition= with unrecognized big e format') do
-    -> { BinaryStruct.new.definition = BIG_STRUCT_DEF_UNRECOG_ENDIAN_FMT }.should
-    raise_error(RuntimeError)
+    expect { BinaryStruct.new.definition = BIG_STRUCT_DEF_UNRECOG_ENDIAN_FMT }
+      .to raise_error(RuntimeError)
   end
   it('#definition= with unsupported big e attribute') do
-    -> { BinaryStruct.new.definition = BIG_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE }.should
-    raise_error(RuntimeError)
+    expect { BinaryStruct.new.definition = BIG_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE }
+      .to raise_error(RuntimeError)
   end
   it('#definition= with unrecognized little e format') do
-    -> { BinaryStruct.new.definition = LIL_STRUCT_DEF_UNRECOG_ENDIAN_FMT }.should
-    raise_error(RuntimeError)
+    expect { BinaryStruct.new.definition = LIL_STRUCT_DEF_UNRECOG_ENDIAN_FMT }
+      .to raise_error(RuntimeError)
   end
   it('#definition= with unsupported little e attribute') do
-    -> { BinaryStruct.new.definition = LIL_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE }.should
-    raise_error(RuntimeError)
+    expect { BinaryStruct.new.definition = LIL_STRUCT_DEF_UNSUPPORTED_ENDIAN_ATTRIBUTE }
+      .to raise_error(RuntimeError)
   end
 
-  it('#size') { BinaryStruct.new(BIG_STRUCT_DEF).size.should == BIG_STRUCT_DEF_SIZE }
-  it('#size') { BinaryStruct.new(LIL_STRUCT_DEF).size.should == LIL_STRUCT_DEF_SIZE }
-  it('#size with definition with *') { BinaryStruct.new(BIG_STRUCT_DEF_STAR).size.should == BIG_STRUCT_DEF_STAR_SIZE }
-  it('#size with definition with *') { BinaryStruct.new(LIL_STRUCT_DEF_STAR).size.should == LIL_STRUCT_DEF_STAR_SIZE }
+  it('#size') { expect(BinaryStruct.new(BIG_STRUCT_DEF).size).to eq(BIG_STRUCT_DEF_SIZE) }
+  it('#size') { expect(BinaryStruct.new(LIL_STRUCT_DEF).size).to eq(LIL_STRUCT_DEF_SIZE) }
+  it('#size with definition with *') { expect(BinaryStruct.new(BIG_STRUCT_DEF_STAR).size).to eq(BIG_STRUCT_DEF_STAR_SIZE) }
+  it('#size with definition with *') { expect(BinaryStruct.new(LIL_STRUCT_DEF_STAR).size).to eq(LIL_STRUCT_DEF_STAR_SIZE) }
 
   it '#decode with different endian definitions' do
-    BinaryStruct.new(BIG_STRUCT_DEF).decode(END_STRUCT_ENCODED_STR).should_not
-    equal(BinaryStruct.new(LIL_STRUCT_DEF).decode(END_STRUCT_ENCODED_STR))
+    expect(BinaryStruct.new(BIG_STRUCT_DEF).decode(END_STRUCT_ENCODED_STR))
+      .not_to equal(BinaryStruct.new(LIL_STRUCT_DEF).decode(END_STRUCT_ENCODED_STR))
   end
   it '#encode with different endian definitions' do
     big    = BinaryStruct.new(BIG_STRUCT_DEF).encode(BIG_ENDIAN_STRUCT_DECODED_HASH)
     little = BinaryStruct.new(LIL_STRUCT_DEF).encode(LIL_ENDIAN_STRUCT_DECODED_HASH)
-    big.should_not equal(little)
+    expect(big).not_to equal(little)
   end
 
   it '#decode little endian struct' do
-    BinaryStruct.new(LIL_STRUCT_DEF).decode(END_STRUCT_ENCODED_STR).should == LIL_ENDIAN_STRUCT_DECODED_HASH
+    expect(BinaryStruct.new(LIL_STRUCT_DEF).decode(END_STRUCT_ENCODED_STR)).to eq(LIL_ENDIAN_STRUCT_DECODED_HASH)
   end
   it '#decode big endian struct' do
-    BinaryStruct.new(BIG_STRUCT_DEF).decode(END_STRUCT_ENCODED_STR).should == BIG_ENDIAN_STRUCT_DECODED_HASH
+    expect(BinaryStruct.new(BIG_STRUCT_DEF).decode(END_STRUCT_ENCODED_STR)).to eq(BIG_ENDIAN_STRUCT_DECODED_HASH)
   end
 
   it '#== against another little endian BinaryStruct' do
-    BinaryStruct.new(LIL_STRUCT_DEF).should     == BinaryStruct.new(LIL_STRUCT_DEF)
+    expect(BinaryStruct.new(LIL_STRUCT_DEF)).to     eq(BinaryStruct.new(LIL_STRUCT_DEF))
   end
   it '#== big endian against another little endian BinaryStruct' do
-    BinaryStruct.new(BIG_STRUCT_DEF).should_not == BinaryStruct.new(LIL_STRUCT_DEF)
+    expect(BinaryStruct.new(BIG_STRUCT_DEF)).not_to eq(BinaryStruct.new(LIL_STRUCT_DEF))
   end
   it '#== against another big endian BinaryStruct' do
-    BinaryStruct.new(BIG_STRUCT_DEF).should     == BinaryStruct.new(BIG_STRUCT_DEF)
+    expect(BinaryStruct.new(BIG_STRUCT_DEF)).to     eq(BinaryStruct.new(BIG_STRUCT_DEF))
   end
 
   it '#each will iterate over definition' do
     dup_def = []
     BinaryStruct.new(BIG_STRUCT_DEF).each { |field, name| dup_def << field << name }
-    dup_def.should == BIG_STRUCT_DEF
+    expect(dup_def).to eq(BIG_STRUCT_DEF)
   end
 
   it '#each will iterate over definition' do
     dup_def = []
     BinaryStruct.new(LIL_STRUCT_DEF).each { |field, name| dup_def << field << name }
-    dup_def.should == LIL_STRUCT_DEF
+    expect(dup_def).to eq(LIL_STRUCT_DEF)
   end
 
   context "old style methods" do
     after(:each) { BinaryStruct.clear_structs_by_definition_cache }
 
     it '#sizeof' do
-      BinaryStruct.sizeof(BIG_STRUCT_DEF).should == BIG_STRUCT_DEF_SIZE
+      expect(BinaryStruct.sizeof(BIG_STRUCT_DEF)).to eq(BIG_STRUCT_DEF_SIZE)
     end
     # Do it twice for consistency reasons
     it '#sizeof' do
-      BinaryStruct.sizeof(BIG_STRUCT_DEF).should == BIG_STRUCT_DEF_SIZE
+      expect(BinaryStruct.sizeof(BIG_STRUCT_DEF)).to eq(BIG_STRUCT_DEF_SIZE)
     end
 
     it '#sizeof' do
-      BinaryStruct.sizeof(LIL_STRUCT_DEF).should == LIL_STRUCT_DEF_SIZE
+      expect(BinaryStruct.sizeof(LIL_STRUCT_DEF)).to eq(LIL_STRUCT_DEF_SIZE)
     end
     # Do it twice for consistency reasons
     it '#sizeof' do
-      BinaryStruct.sizeof(LIL_STRUCT_DEF).should == LIL_STRUCT_DEF_SIZE
+      expect(BinaryStruct.sizeof(LIL_STRUCT_DEF)).to eq(LIL_STRUCT_DEF_SIZE)
     end
   end
 end
