@@ -1,7 +1,3 @@
-require File.expand_path(File.join(File.dirname(__FILE__), "spec_helper"))
-
-require 'binary_struct'
-
 describe BinaryStruct do
   let(:gif_header) do
     BinaryStruct.new([
