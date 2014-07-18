@@ -1,7 +1,3 @@
-require File.expand_path(File.join(File.dirname(__FILE__), "spec_helper"))
-
-require 'binary_struct'
-
 describe BinaryStruct do
   let(:gif_header) do
     BinaryStruct.new([
@@ -29,7 +25,7 @@ describe BinaryStruct do
     encoded_header = gif_header.encode(decoded_header_hash)
     header_size = gif_header.size
     header = File.open(filename, "rb") { |f| f.read(header_size) }
-    encoded_header.should == header
+    expect(encoded_header).to eq(header)
   end
 
   it "write a gif header" do
@@ -43,6 +39,6 @@ describe BinaryStruct do
       :pixel_aspect_ratio => 0
     )
 
-    header.should == "GIF89a\x10\x00\x10\x00\x80\x00\x00".force_encoding("ASCII-8BIT")
+    expect(header).to eq("GIF89a\x10\x00\x10\x00\x80\x00\x00".force_encoding("ASCII-8BIT"))
   end
 end
