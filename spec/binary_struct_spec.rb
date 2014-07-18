@@ -52,7 +52,7 @@ describe BinaryStruct do
   end
 
   it '#decode with definition with *' do
-    expect(BinaryStruct.new(STRUCT_DEF_ASTERISK).decode("Testing")).to eq({:word => "Testing"})
+    expect(BinaryStruct.new(STRUCT_DEF_ASTERISK).decode("Testing")).to eq(:word => "Testing")
   end
 
   it '#decode against multiple records' do
@@ -64,7 +64,7 @@ describe BinaryStruct do
   end
 
   it '#encode with definition with *' do
-    expect(BinaryStruct.new(STRUCT_DEF_ASTERISK).encode({:word => "Testing"})).to eq("Testing")
+    expect(BinaryStruct.new(STRUCT_DEF_ASTERISK).encode(:word => "Testing")).to eq("Testing")
   end
 
   it '#encode against multiple records' do
