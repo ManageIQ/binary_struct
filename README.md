@@ -1,10 +1,10 @@
 # BinaryStruct
 
-[![Gem Version](https://badge.fury.io/rb/binary_struct.png)](http://badge.fury.io/rb/binary_struct)
-[![Build Status](https://travis-ci.org/ManageIQ/binary_struct.png)](https://travis-ci.org/ManageIQ/binary_struct)
-[![Code Climate](https://codeclimate.com/github/ManageIQ/binary_struct.png)](https://codeclimate.com/github/ManageIQ/binary_struct)
-[![Coverage Status](https://coveralls.io/repos/ManageIQ/binary_struct/badge.png?branch=master)](https://coveralls.io/r/ManageIQ/binary_struct)
-[![Dependency Status](https://gemnasium.com/ManageIQ/binary_struct.png)](https://gemnasium.com/ManageIQ/binary_struct)
+[![Gem Version](https://badge.fury.io/rb/binary_struct.svg)](http://badge.fury.io/rb/binary_struct)
+[![Build Status](https://travis-ci.org/ManageIQ/binary_struct.svg)](https://travis-ci.org/ManageIQ/binary_struct)
+[![Code Climate](http://img.shields.io/codeclimate/github/ManageIQ/binary_struct.svg)](https://codeclimate.com/github/ManageIQ/binary_struct)
+[![Coverage Status](http://img.shields.io/coveralls/ManageIQ/binary_struct.svg)](https://coveralls.io/r/ManageIQ/binary_struct)
+[![Dependency Status](https://gemnasium.com/ManageIQ/binary_struct.svg)](https://gemnasium.com/ManageIQ/binary_struct)
 
 BinaryStruct is a class for dealing with binary structured data.  It simplifies
 expressing what the binary structure looks like, with the ability to name the
