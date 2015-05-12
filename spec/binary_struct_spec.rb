@@ -1,25 +1,33 @@
 describe BinaryStruct do
   STRUCT_DEF = [
-    'Q', :quad,
-    'L', 'long',
-    'S', :short,
-    'C', nil,
+    'Q',  :quad,
+    'L',  'long',
+    'S',  :short,
+    'C',  nil,
+    'b5', :binary,
     'a0', 'none',
-    'a', nil,
+    'a',  nil,
     'a2', 'bc',
   ]
-  STRUCT_DEF_SIZE = 18
+  STRUCT_DEF_SIZE = 19
 
   STRUCT_DEF_ASTERISK = ['a*', :word]
   STRUCT_DEF_ASTERISK_SIZE = 0 # '*' is ignored
 
   STRUCT_DEF_UNRECOGNIZED_FORMAT   = ['D', nil]
-  STRUCT_DEF_UNSUPPORTED_FORMAT    = ['B', nil]
+  STRUCT_DEF_UNSUPPORTED_FORMAT    = ['U', nil]
   STRUCT_DEF_UNSUPPORTED_COUNT_NEG = ['a-1', nil]
   STRUCT_DEF_UNSUPPORTED_COUNT_INV = ['aX', nil]
 
-  STRUCT_ENCODED_STR  = "\000\111\222\333\444\555\666\777\000\111\222\333\000\111\0000BC".force_encoding("ASCII-8BIT")
-  STRUCT_DECODED_HASH = {:quad=>18426034930503010560, "long"=>3683797248, :short=>18688, "bc"=>"BC", "none"=>""}
+  STRUCT_ENCODED_STR  = "\000\111\222\333\444\555\666\777\000\111\222\333\000\111\000\0320BC".force_encoding("ASCII-8BIT")
+  STRUCT_DECODED_HASH = {
+    :quad   => 18_426_034_930_503_010_560,
+    "long"  => 3_683_797_248,
+    :short  => 18_688,
+    :binary => "01011",
+    "bc"    => "BC",
+    "none"  => ""
+  }
 
   it('.new') { expect { BinaryStruct.new }.not_to raise_error }
   it('.new with definition') { expect { BinaryStruct.new(STRUCT_DEF) }.not_to raise_error }

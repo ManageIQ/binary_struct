@@ -5,16 +5,16 @@ class BinaryStruct
   SIZES = {
     'A'   => 1,   # String with trailing NULs and spaces removed
     'a'   => 1,   # String
-    'B'   => nil, # Extract bits from each character (MSB first)
-    'b'   => nil, # Extract bits from each character (LSB first)
+    'B'   => 1,   # Extract bits from each character (MSB first)
+    'b'   => 1,   # Extract bits from each character (LSB first)
     'C'   => 1,   # Extract a character as an unsigned integer
     'c'   => 1,   # Extract a character as a    signed integer
     'E'   => nil, # Treat sizeof(double) characters as a double in little-endian byte order
     'e'   => nil, # Treat sizeof(float)  characters as a float  in little-endian byte order
     'G'   => nil, # Treat sizeof(double) characters as a double in network       byte order
     'g'   => nil, # Treat sizeof(float)  characters as a float  in network       byte order
-    'H'   => nil, # Extract hex nibbles from each character (most  significant first)
-    'h'   => nil, # Extract hex nibbles from each character (least significant first)
+    'H'   => 1,   # Extract hex nibbles from each character (most  significant first)
+    'h'   => 1,   # Extract hex nibbles from each character (least significant first)
     'I'   => 4,   # Treat sizeof(int) successive characters as an unsigned native integer
     'i'   => 4,   # Treat sizeof(int) successive characters as a    signed native integer
     'L'   => 4,   # Treat 4 successive characters as an unsigned native long integer
@@ -39,7 +39,9 @@ class BinaryStruct
     'Z'   => 1,   # String with trailing NULs removed
   }
 
-  STRING_FORMATS   = %w(A a M m u)
+  STRING_FORMATS   = %w(A a B b H h M m u)
+  BIT_FORMATS      = %w(B b)
+  NIBBLE_FORMATS   = %w(H h)
   ENDIAN_FORMATS   = %w(I i L l Q q S s)
   ENDIAN_MODIFIERS = %w(> <)
   MODIFIERS        = ENDIAN_MODIFIERS
@@ -202,7 +204,14 @@ class BinaryStruct
       modifier, modcount = count[0, 1], count[1..-1]
       count = modcount if valid_definition_entry_modifier?(modifier)
       count = count.empty? ? 1 : count.to_i
-      size += (count * SIZES[type])
+      size +=
+        if BIT_FORMATS.include?(type)
+          (count / 8.0).ceil
+        elsif NIBBLE_FORMATS.include?(type)
+          (count / 2.0).ceil
+        else
+          count * SIZES[type]
+        end
     end
     size
   end
