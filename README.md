@@ -65,6 +65,27 @@ File.open("test.gif", "wb") { |f| f.write(header) }
 => "GIF89a\x10\x00\x10\x00\x80\x00\x00"
 ```
 
+## Note about bit and nibble formats
+
+BinaryStruct supports bit formats and nibble formats, however note that the
+underlying Ruby methods, [pack](http://ruby-doc.org/core-2.2.0/Array.html#method-i-pack)
+and [unpack](http://ruby-doc.org/core-2.2.0/String.html#method-i-unpack), support
+less than 8 bits by reading an entire byte, even if all of the bits are not used.
+
+For example,
+
+```ruby
+s = "\xFF\x00"       # binary: 1111111100000000
+s.unpack("b8b8")     # => ["11111111", "00000000"]
+s.unpack("b4b4b4b4") # => ["1111", "0000", "", ""]
+```
+
+One might expect that the latter would read 4 bits, then the next 4 bits, etc,
+yielding `["1111", "1111", "0000", "0000"]`, but that is not the case.  Instead,
+the first b4 reads a full byte's worth, then discards the unused 4 bits, and the
+same happens for the next b4.  The third and fourth b4 have nothing left to read,
+and so just return empty strings.
+
 ## Installation
 
 Add this line to your application's Gemfile:
