@@ -58,6 +58,7 @@ class BinaryStruct
     if value.kind_of?(self.class)
       @definition = value.definition.dup
     else
+      value = value.to_a.map(&:reverse).flatten if value.kind_of?(Hash)
       value = Array(value)
       self.class.validate_definition(value)
       @definition = value

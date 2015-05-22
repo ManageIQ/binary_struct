@@ -11,6 +11,17 @@ describe BinaryStruct do
   ]
   STRUCT_DEF_SIZE = 19
 
+  STRUCT_DEF_HASH = {
+    :quad   => 'Q',
+    'long'  => 'L',
+    :short  => 'S',
+    nil     => 'C',
+    :binary => 'b5',
+    'none'  => 'a0',
+    :unused => 'a',
+    'bc'    => 'a2',
+  }
+
   STRUCT_DEF_ASTERISK = ['a*', :word]
   STRUCT_DEF_ASTERISK_SIZE = 0 # '*' is ignored
 
@@ -28,10 +39,12 @@ describe BinaryStruct do
     "bc"    => "BC",
     "none"  => ""
   }
+  STRUCT_DECODED_HASH2 = STRUCT_DECODED_HASH.merge(:unused => "0")
 
   it('.new') { expect { BinaryStruct.new }.not_to raise_error }
   it('.new with definition') { expect { BinaryStruct.new(STRUCT_DEF) }.not_to raise_error }
   it('.new with definition with *') { expect { BinaryStruct.new(STRUCT_DEF_ASTERISK) }.not_to raise_error }
+  it('.new with Hash defintion') { expect { BinaryStruct.new(STRUCT_DEF_HASH) }.not_to raise_error }
   it '.new with another BinaryStruct' do
     s = BinaryStruct.new(STRUCT_DEF)
     s2 = BinaryStruct.new(s)
@@ -46,6 +59,7 @@ describe BinaryStruct do
 
   it('#definition=') { expect { BinaryStruct.new.definition = STRUCT_DEF }.not_to raise_error }
   it('#definition= with definition with *') { expect { BinaryStruct.new.definition = STRUCT_DEF_ASTERISK }.not_to raise_error }
+  it('#definition= with Hash defintion') { expect { BinaryStruct.new.definition = STRUCT_DEF_HASH }.not_to raise_error }
 
   it('#definition= with unrecognized format')        { expect { BinaryStruct.new.definition = STRUCT_DEF_UNRECOGNIZED_FORMAT }.to   raise_error(RuntimeError) }
   it('#definition= with unsupported format')         { expect { BinaryStruct.new.definition = STRUCT_DEF_UNSUPPORTED_FORMAT }.to    raise_error(RuntimeError) }
@@ -61,6 +75,10 @@ describe BinaryStruct do
 
   it '#decode with definition with *' do
     expect(BinaryStruct.new(STRUCT_DEF_ASTERISK).decode("Testing")).to eq(:word => "Testing")
+  end
+
+  it '#decode with Hash defintion' do
+    expect(BinaryStruct.new(STRUCT_DEF_HASH).decode(STRUCT_ENCODED_STR)).to eq(STRUCT_DECODED_HASH2)
   end
 
   it '#decode against multiple records' do
