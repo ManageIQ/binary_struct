@@ -126,6 +126,21 @@ class BinaryStruct
     self.definition.each_slice(2, &block)
   end
 
+  def offset(attr)
+    offset = 0
+    self.definition.each_slice(2) do |format, name|
+      return offset if name == attr
+
+      type,count = format[0,1], format[1..-1]
+      count = count.empty? ? 1 : count.to_i
+      size = BinaryStruct::SIZES[type]
+
+      offset += BinaryStruct::STRING_FORMATS.include?(type) ?
+                size * count : size
+    end
+    offset
+  end
+
   #
   # Methods to handle the old style of calling
   #

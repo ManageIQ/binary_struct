@@ -109,6 +109,10 @@ describe BinaryStruct do
     expect(dup_def).to eq(STRUCT_DEF)
   end
 
+  it "#offset to specified attribute" do
+    expect(BinaryStruct.new(STRUCT_DEF).offset(:short)).to eq(12)
+  end
+
   context "old style methods" do
     after(:each) { BinaryStruct.clear_structs_by_definition_cache }
 
