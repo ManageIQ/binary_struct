@@ -1,7 +1,7 @@
 # BinaryStruct
 
 [![Gem Version](https://badge.fury.io/rb/binary_struct.svg)](http://badge.fury.io/rb/binary_struct)
-[![Build Status](https://travis-ci.org/ManageIQ/binary_struct.svg)](https://travis-ci.org/ManageIQ/binary_struct)
+[![CI](https://github.com/ManageIQ/binary_struct/actions/workflows/ci.yaml/badge.svg)](https://github.com/ManageIQ/binary_struct/actions/workflows/ci.yaml)
 [![Code Climate](http://img.shields.io/codeclimate/github/ManageIQ/binary_struct.svg)](https://codeclimate.com/github/ManageIQ/binary_struct)
 [![Coverage Status](http://img.shields.io/coveralls/ManageIQ/binary_struct.svg)](https://coveralls.io/r/ManageIQ/binary_struct)
 [![Dependency Status](https://gemnasium.com/ManageIQ/binary_struct.svg)](https://gemnasium.com/ManageIQ/binary_struct)
