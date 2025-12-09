@@ -2,8 +2,6 @@
 
 [![Gem Version](https://badge.fury.io/rb/binary_struct.svg)](http://badge.fury.io/rb/binary_struct)
 [![CI](https://github.com/ManageIQ/binary_struct/actions/workflows/ci.yaml/badge.svg)](https://github.com/ManageIQ/binary_struct/actions/workflows/ci.yaml)
-[![Maintainability](https://api.codeclimate.com/v1/badges/98184649fd8158e259d8/maintainability)](https://codeclimate.com/github/ManageIQ/binary_struct/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/98184649fd8158e259d8/test_coverage)](https://codeclimate.com/github/ManageIQ/binary_struct/test_coverage)
 
 BinaryStruct is a class for dealing with binary structured data.  It simplifies
 expressing what the binary structure looks like, with the ability to name the
